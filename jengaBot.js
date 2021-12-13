@@ -354,7 +354,7 @@ client.on('messageCreate', msg =>{
 					}
 				break;
 				case 'decline':
-					if (userID == prevUser.userID) {
+					if (userID == prevUser.userID || isAuthorized(userID)) {
 						currentStack.push(prevTile);
 						graveyard.shift();
 						shuffleStack();
@@ -462,6 +462,7 @@ client.on('messageCreate', msg =>{
 						}
 						
 						var adminTile = currentStack.pop();
+						prevTile = adminTile;
 						graveyard.unshift(adminTile.name);
 						msg.channel.send("Admin "+nickname+" drew\n**"+adminTile.name+"**: \n\t*"+ adminTile.text +"*");
 						console.log("Admin draw: "+username+" drew "+adminTile.name+": "+ adminTile.text);
