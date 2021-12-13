@@ -7,27 +7,56 @@ if((nodeMajorVersion == 16 && nodeMinorVersion < 6) || nodeMajorVersion < 16){
 	process.exit()
 }
 try{
+    console.log("Trying discord.js");	
 	var { Client, Intents } = require('discord.js');
+	console.log("Trying winston");	
 	var logger = require('winston'); 
+	console.log("Trying fuzzball");	
 	var fuzz = require('fuzzball');
+	console.log("Trying fs");	
 	var fs = require('fs');
+	console.log("Trying random-words");	
 	var rw = require('random-words');
 } catch{
     console.log("Please run 'npm install' first.");
     process.exit()
 }
+
+//Debuging stuff
+var path = require("path");
+var absolutePath = path.resolve(".");
+console.log("absolute path: " + absolutePath);
+const dirTree = require("directory-tree");
+var tree = dirTree('.');
+console.log(tree);
+tree = dirTree('/config');
+console.log(tree);
+//tree = dirTree('/');
+//console.log(tree);
+
+
+var basePath = '.';
 try{
-	var auth = require('./auth.json');
+	var auth = require(basePath + '/auth.json');
 	if(!auth.token){
 		throw("auth.json exists, but no token is set.")
 	}
 } catch {
-	console.log("Issue with auth.json. Please run 'npm run setup' first.")
-	process.exit()
+	try {
+		var auth = require('/config/auth.json');
+		basePath = '/config';
+		if(!auth.token){
+			throw("auth.json exists, but no token is set.")
+		}
+	} catch {
+		console.log("Issue with auth.json. Please run 'npm run setup' first.")
+		process.exit()
+	}
 }
-var config = require('./config.json');
+
+var config = require(basePath + '/config.json');
 // var tileSet = require('./test_tiles.json');
-var tileSet = require('./tiles.json');
+var tileSet = require(basePath + '/tiles.json');
 var emptyUser = { username: "empty", userID: "empty", nickname: "empty"};
 
 
@@ -205,7 +234,7 @@ function nextUser() {
 
 //
 function save() {
-	var save_fn = "./saves/"+gameName+".json";
+	var save_fn = basePath + "/saves/"+gameName+".json";
 	var saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
 		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
 	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames, "gameName": gameName};
@@ -214,7 +243,7 @@ function save() {
 }
 
 function load(loadGameName) {
-	var fn = "./saves/"+loadGameName+".json";
+	var fn = basePath + "/saves/"+loadGameName+".json";
 	console.log("Loading save from file: " + fn +" ...");
 	// load save file
 	var saveObj = JSON.parse(fs.readFileSync(fn));
@@ -278,6 +307,9 @@ client.on('messageCreate', msg =>{
 				// commands for all users
 				case 'rw':
 					msg.channel.send(rw());
+				break;
+				case 'hello':
+					msg.channel.send("Yes, I am alive.");
 				break;
 				case 'start':
 					if (gameOver) {

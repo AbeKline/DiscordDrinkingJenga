@@ -1,3 +1,12 @@
+Docker Unraid:
+	Add documentation on Dockerhub
+		https://hub.docker.com/r/oddood/discord-drinking-jenga
+	figure out how best to do set up. Should we create a web gui? or can we extract the templates to a mapped volume? Or docker variables?
+	NOTE: dir-tree in package.json is for debugging only
+
+
+
+
 !absoluteorder ????
 
 Feature Requests:
@@ -28,7 +37,7 @@ Features Added:
 	!save/!load
 	!graveyard
 	!tileset
-	Configurator
+	CLI configurator
 	Discord.js migration
 	nicknames supported
 	!admindraw respect !decline kinda. 
