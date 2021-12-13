@@ -2,7 +2,7 @@
 /* jshint node: true */
 var nodeMajorVersion = Number.parseInt(process.version.split(".")[0].replace('v','')); 
 var nodeMinorVersion = Number.parseInt(process.version.split(".")[1]); 
-if((nodeMajorVersion >= 16 && nodeMinorVersion < 6) || nodeMajorVersion < 16){
+if((nodeMajorVersion == 16 && nodeMinorVersion < 6) || nodeMajorVersion < 16){
 	console.log(`Please make sure Node (version 16.6.0 or greater) is installed. ${process.version} is currently installed.`);
 	process.exit()
 }
